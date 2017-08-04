@@ -1,6 +1,7 @@
 
 #views.py
 
+import time
 from __init__ import * # s_app, AddNewUser
 from flask import render_template, request
 from UserHandler import UserHandle
@@ -23,8 +24,8 @@ def signup():
 	result = u.AddNewUser()
 
         if result == "success":
-            return "Success! YAY!"
-            #TODO: go to new user page
+            u.GetUserInfo().PopulatePage("Stuff here", "Fill me in!")
+            return redirect(url_for('userpage'), code=307)
         else:
             return render_template('error.html', error=result)
     else:
@@ -34,18 +35,58 @@ def signup():
 @s_app.route('/signin', methods=['POST', 'GET'])
 def signin():
     if request.method == 'POST':
-	return "foobar"
-        #TODO: go to existing user page
-    else:
-        form = forms.SignIn()
-        return render_template('signin.html', form=form)
+	email = request.form['email']
+	password = request.form['password']
 
+	if CheckLogin(email, password):
+            return redirect(url_for('edit'), code=307)
+
+        time.sleep(3)
+        return render_template('error.html', error="Username or password incorrect. Try again.")
+
+    form = forms.SignIn()
+    return render_template('signin.html', form=form)
+
+@s_app.route('/userpage', methods=['POST', 'GET'])
+def getuserpage():
+    if request.method == 'POST':
+        email = request.form['email']
+        uid = RetrieveUserInfo(email).GetUid()
+        return redirect('/userpage/%d' % (uid))
+    else:
+        form = forms.Search()
+        return render_template('search.html', form=form)
+
+@s_app.route('/userpage/<id>')
+def userpage(id):
+    u = RetrieveUserInfo(uid=id)
+    research, about = u.GetPage()
+    return render_template('userpage.html', research=research, about=about)
+
+@s_app.route('/edit', methods=['POST', 'GET'])
+def edit():
+    email = request.form['email']
+    password = request.form['password']
+    save = request.form['save'] #0 or 1
+
+    #double-check credentials, just to be sure
+    if not CheckLogin(email, password):
+        time.sleep(3)
+        return render_template('error.html', error="You're not logged in!")
+
+    if save == 0:
+        form = forms.Edit()
+        return render_template('edit.html', form=form)
+
+    research = request.form['research']
+    about = request.form['about']
+    RetrieveUserInfo(email).PopulatePage(research, about)
+
+    return redirect(url_for('userpage'), code=307)
 
 @s_app.route('/error', methods=['POST', 'GET'])
-def error(error):
-    return render_template('error.html', form=form)
+def error():
+    return render_template('error.html')
 
-
-print(s_app.instance_path)
-import sys
-print(sys.version_info)
+def CheckLogin(email, password):
+    return RetrieveUserInfo(email).CheckLogin(password)

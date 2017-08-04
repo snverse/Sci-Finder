@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='userpage.css') }}" />
+<title>SciFinder Template</title>
+</head>
+
+<body>
+    <div id="page">
+        <div class="topNaviagationLink"><a href="#Research">Research</a></div>
+	</div>
+    <div id="mainPicture">
+    	<div class="picture">
+        	<div id="headerTitle"></div>
+            <div id="headerSubtext"></div>
+        </div>
+    </div>
+        <div class="contentBox">
+    	<div class="innerBox">
+        	<h1>Principle Investigator</h1>
+          <div class="contentText">
+            <p> <img src="{{ url_for('static', filename='avatar.jpg') }}" width="200" alt="PI Image"> </p> 
+            <p> {{ about }} </p> </div>
+        </div>
+    </div>      
+
+    <section id="Research">
+    <div class="contentBox">
+        <div class="innerBox">
+          <h1>Research</h1>
+          <div class="contentText">
+            {{ research }}
+          </div>
+        </div>
+    </div> 
+</section>       
+</body>
+</html>

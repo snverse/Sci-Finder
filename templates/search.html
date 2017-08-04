@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SciFinder Sign Up</title>
+    <title>Search SciFinder</title>
     {% block content %} {% endblock %} 
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
  
@@ -14,25 +14,24 @@
  
     <div class="container">
       <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/index">Home</a></li>
-            <li role="presentation" class = "active"><a href="/signin">Sign In</a></li>
-        </nav>
         <h3 class="text-muted">SciFinder</h3>
       </div>
  
       <div class="jumbotron">
         <img src="{{ url_for('static', filename='scifinder.png') }}" alt="Logo" height="125" width="225">
+        <h3> Search SciFinder </h3>
 
-        <form class="form-signup" action="" method="post">
-          {{ form.email(class = "form-control", placeholder="Email") }}
- 
-          {{ form.password(class = "form-control", placeholder="Password") }}
+        <form class="Page" action="" method="post">
 
-          {{ form.submit(class = "btn btn-lg btn-primary btn-block") }}
+          {{ form.query(class = "form-control",  id="#search",  placeholder="Search") }}
+
+          {{ form.submit(class = "btn btn-lg btn-success", value = "Search", id = "submit") }}
+
         </form>
       </div>
+ 
+       
+ 
       <footer class="footer">
         <p></p>
       </footer>

@@ -77,7 +77,39 @@ class UserHandle():
             print("User: ", self.name, " already exists, not added!")
             return "Error: User already exists. Please try a different email address."
 
+        def GetUserInfo(self):
+            return RetrieveUserInfo(self.email)
+
+
+
+class RetrieveUserInfo():
+    def __init__(self, email = None, uid = None):
+        '''Must specify at least parameter '''
+
+
+        self.email = email
+        self.uid = uid
+
+        self.ConnectToDB()
+
+            #if uid not passed in then get uid and store
+        if self.uid is None:
+            self.GetUid()
+    def ConnectToDB(self):
+        #creating MySQLConnection object using connect() constructor to the MySQL server. 
+        self.mariaCon = mysql.connector.connect(user='flask', host ='localhost', password = 'flaskpass' , database ='scifinder')
+        self.cursor = self.mariaCon.cursor()
+
+
     def PopulatePage(self, about, research):
+
+        #delete before attempting to add
+
+        delete_info = ("DELETE FROM Page where user = %s")        
+
+        #self.cursor.execute(delete_info, (self.uid,))
+        #self.mariaCon.commit()
+
 
         #Add about and research to Page
 
@@ -90,24 +122,16 @@ class UserHandle():
         #once user page is populted, connection is closed
         #self.DisconnectDB
 
-class RetrieveUserInfo():
-    def __init__(self, email):
-        self.email = email
-        self.uid = None
-
-        self.ConnectToDB()
-
-    def ConnectToDB(self):
-        #creating MySQLConnection object using connect() constructor to the MySQL server. 
-        self.mariaCon = mysql.connector.connect(user='flask', host ='localhost', password = 'flaskpass' , database ='scifinder')
-        self.cursor = self.mariaCon.cursor()
-
     def GetUid(self):
         query_uid = "SELECT uid FROM User WHERE email = %s"
         self.cursor.execute(query_uid, (self.email,))
+        temp = self.cursor.fetchone()
 
-        self.uid = self.cursor.fetchone()[0]
-        return self.uid
+        if temp is None:
+            return -1
+        else:
+            self.uid = temp[0]
+            return self.uid
 
 
     def CheckLogin(self,password):
@@ -125,6 +149,7 @@ class RetrieveUserInfo():
         self.mariaCon.close()
 
     def GetPage(self):
+        #TODO  
         query_uid = "SELECT Page.research, Page.about FROM User join Page on User.uid=Page.user WHERE User.email = %s "
         self.cursor.execute(query_uid, (self.email,))
         return self.cursor.fetchone()
@@ -132,15 +157,17 @@ class RetrieveUserInfo():
 
 
 if __name__ == "__main__":
-    #new = UserHandle("5Ronjo", "5new here", "5WORKING@gmail.com")
+    new = UserHandle("777Ronjo", "5new here", "777WORKING@gmail.com")
 
-    #new.AddNewUser()
-    #new.PopulatePage("THIS WHOULD LKJLKJ", "BITEME!!!")
+    new.AddNewUser()
+    retr = RetrieveUserInfo("777WORKING@gmail.com")
+    retr.PopulatePage("information here", "more ino")
+    retr.PopulatePage("information here", "DIFFERENT INFO")
 
-    retr = RetrieveUserInfo("5WORKING@gmail.com")
+    retr = RetrieveUserInfo("nothomer@duff.com")
     print("UID: ",retr.GetUid())
     print("Research and About ", retr.GetPage())
-    if retr.CheckLogin("5new here" ):
+    if retr.CheckLogin("beeer"):
         print("login worked")
     else:
         print("login failed")
