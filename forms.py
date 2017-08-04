@@ -10,3 +10,8 @@ class SignUp(Form):
 	email = TextField("Email", validators=[DataRequired()])
 	password = PasswordField("Password", validators=[DataRequired()])
 	submit = SubmitField("Submit")
+
+class SignIn(Form):
+	email = TextField("Email", validators=[DataRequired()])
+	password = PasswordField("Password", validators=[DataRequired()])
+	submit = SubmitField("Submit")

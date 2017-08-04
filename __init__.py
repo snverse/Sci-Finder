@@ -3,7 +3,7 @@ from __future__ import print_function
 from flask import Flask
 import mysql.connector   #communicates with MySQL database (MariaDB)
 
-s_app = Flask(__name__)  # Create a Flask application object called t_app 
+s_app = Flask(__name__, static_url_path="")  # Create a Flask application object called t_app 
 #s_app.config.from_object('config') # was giving error 
 
 #from ScifinderApp import views # Import the views module from the ScifinderApp package
@@ -52,5 +52,6 @@ def AddNewUser(name, pwd, email):
         return "error"
 
 if __name__ == "__main__":
+    s_app.static_folder = "static"
     s_app.run(debug=True)
     print("*******THIS IS RUNNING __INIT___ FILE :" , __name__)

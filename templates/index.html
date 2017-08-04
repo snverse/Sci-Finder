@@ -15,9 +15,9 @@
         <div class="header">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="#">Home</a>
+                    <li role="presentation" class="active"><a href="/">Home</a>
                     </li>
-                    <li role="presentation"><a href="#">Sign In</a>
+                    <li role="presentation" class ="active"><a href="/signin">Sign In</a>
                     </li>
                 </ul>
             </nav>
@@ -25,7 +25,7 @@
         </div>
  
         <div class="jumbotron">
-            <img src="/static/scifinder.png" alt="Logo" height="125" width="225"> 
+            <img src="{{ url_for('static', filename='scifinder.png') }}" alt="Logo" height="125" width="225"> 
             <p class="lead"></p>
             <p><a class="btn btn-lg btn-success" a href="/signup" role="button">Sign Up</a>
             </p>
