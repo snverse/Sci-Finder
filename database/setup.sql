@@ -22,8 +22,7 @@ CREATE TABLE Lab (
 CREATE TABLE Page (
 	research	MEDIUMTEXT,
 	about		MEDIUMTEXT,
-	image		MEDIUMBLOB,
-	user		INT UNSIGNED,
+	user		INT UNSIGNED PRIMARY KEY,
 	FOREIGN KEY (user) REFERENCES User (uid)
 );
 

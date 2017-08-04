@@ -7,19 +7,18 @@
 
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
  
+    <link href="{{ url_for('static', filename='signup.css') }}" rel="stylesheet">
 </head>
  
 <body>
  
     <div class="container">
         <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="/">Home</a>
-                    </li>
-                    <li role="presentation"><a href="/signin">Sign In</a>
-                    </li>
-                </ul>
+             <nav>
+          	<ul class="nav nav-pills pull-right">
+            		<li role="presentation" class = "active"><a href="/index">Home</a></li>
+            		<li role="presentation"><a href="/signin">Sign In</a></li>
+            		<li role="presentation"> <a href="/userpage">Search</a></li>
             </nav>
             <h3 class="text-muted">SciFinder</h3>
         </div>

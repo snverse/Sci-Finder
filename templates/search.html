@@ -14,6 +14,12 @@
  
     <div class="container">
       <div class="header">
+	<nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/index">Home</a></li>
+            <li role="presentation"><a href="/signin">Sign In</a></li>
+	    <li role="presentation" class = "active"> <a href="/userpage">Search</a></li>
+        </nav>
         <h3 class="text-muted">SciFinder</h3>
       </div>
  
@@ -25,7 +31,7 @@
 
           {{ form.query(class = "form-control",  id="#search",  placeholder="Search") }}
 
-          {{ form.submit(class = "btn btn-lg btn-success", value = "Search", id = "submit") }}
+          {{ form.submit(class = "btn btn-lg btn-primary btn-block", value = "Search", id = "submit") }}
 
         </form>
       </div>

@@ -70,15 +70,15 @@ class UserHandle():
             self.uid = self.cursor.fetchone()[0]
 
             print("User: ", self.name, "added to database")
-            return "sucess"
+            return "success"
 
         #USER ALREADY EXISTS, DONT ADD
         else:
             print("User: ", self.name, " already exists, not added!")
             return "Error: User already exists. Please try a different email address."
 
-        def GetUserInfo(self):
-            return RetrieveUserInfo(self.email)
+    def GetUserInfo(self):
+        return RetrieveUserInfo(self.email, self.uid)
 
 
 
@@ -103,17 +103,8 @@ class RetrieveUserInfo():
 
     def PopulatePage(self, about, research):
 
-        #delete before attempting to add
 
-        delete_info = ("DELETE FROM Page where user = %s")        
-
-        #self.cursor.execute(delete_info, (self.uid,))
-        #self.mariaCon.commit()
-
-
-        #Add about and research to Page
-
-        add_info = ("INSERT INTO Page (user, about, research) "
+        add_info = ("REPLACE INTO Page (user, about, research) "
                     "VALUES  (%s, %s, %s)")
 
         self.cursor.execute(add_info, (self.uid, about, research))
@@ -149,11 +140,21 @@ class RetrieveUserInfo():
         self.mariaCon.close()
 
     def GetPage(self):
-        #TODO  
-        query_uid = "SELECT Page.research, Page.about FROM User join Page on User.uid=Page.user WHERE User.email = %s "
-        self.cursor.execute(query_uid, (self.email,))
-        return self.cursor.fetchone()
+        data = None
 
+        if self.uid is not None:
+            query = "SELECT about, research FROM Page WHERE user = %s"
+            self.cursor.execute(query, (self.uid,))
+            data = self.cursor.fetchone()
+
+        elif self.email is not None:
+            query = "SELECT about, research FROM Page JOIN User ON Page.user = User.uid WHERE User.email = %s"
+            self.cursor.execute(query, (self.email,))
+            data = self.cursor.fetchone()
+
+        if data is None:
+            return None
+        return data[0], data[1]
 
 
 if __name__ == "__main__":

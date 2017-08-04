@@ -1,10 +1,9 @@
-
 #views.py
 
 import time
 from __init__ import * # s_app, AddNewUser
-from flask import render_template, request
-from UserHandler import UserHandle
+from flask import *
+from UserHandler import *
 import forms
 
 @s_app.route('/')
@@ -24,8 +23,10 @@ def signup():
 	result = u.AddNewUser()
 
         if result == "success":
-            u.GetUserInfo().PopulatePage("Stuff here", "Fill me in!")
-            return redirect(url_for('userpage'), code=307)
+            info = u.GetUserInfo()
+            info.PopulatePage("Stuff here", "Fill me in!")
+            return edit(email, password)
+
         else:
             return render_template('error.html', error=result)
     else:
@@ -39,7 +40,7 @@ def signin():
 	password = request.form['password']
 
 	if CheckLogin(email, password):
-            return redirect(url_for('edit'), code=307)
+            return edit(email, password)
 
         time.sleep(3)
         return render_template('error.html', error="Username or password incorrect. Try again.")
@@ -60,29 +61,35 @@ def getuserpage():
 @s_app.route('/userpage/<id>')
 def userpage(id):
     u = RetrieveUserInfo(uid=id)
-    research, about = u.GetPage()
+    data = u.GetPage()
+
+    if data is None:
+        return redirect('/userpage')
+
+    research, about = data
     return render_template('userpage.html', research=research, about=about)
 
 @s_app.route('/edit', methods=['POST', 'GET'])
-def edit():
+def edit(email=None, password=None):
+    if email is not None:
+        form = forms.Edit()
+        return render_template('edit.html', form=form, email=email, password=password)
+
     email = request.form['email']
     password = request.form['password']
-    save = request.form['save'] #0 or 1
 
     #double-check credentials, just to be sure
     if not CheckLogin(email, password):
         time.sleep(3)
         return render_template('error.html', error="You're not logged in!")
 
-    if save == 0:
-        form = forms.Edit()
-        return render_template('edit.html', form=form)
-
     research = request.form['research']
     about = request.form['about']
-    RetrieveUserInfo(email).PopulatePage(research, about)
+    info = RetrieveUserInfo(email)
+    info.PopulatePage(research, about)
+    uid = info.GetUid()
 
-    return redirect(url_for('userpage'), code=307)
+    return redirect("/userpage/%d" % (uid))
 
 @s_app.route('/error', methods=['POST', 'GET'])
 def error():

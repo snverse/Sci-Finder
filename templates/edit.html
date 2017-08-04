@@ -5,8 +5,8 @@
     {% block content %} {% endblock %} 
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
  
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='signup.css') }}" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='signup.css') }}" rel="stylesheet" />
     
   </head>
  
@@ -21,13 +21,14 @@
         <img src="{{ url_for('static', filename='scifinder.png') }}" alt="Logo" height="125" width="225">
         <h3> Create Your Page! </h3>
 
-        <form class="Page" action="" method="post">
+        <form class="Page" action="/edit" method="post">
 
           {{ form.about(class = "form-control", placeholder="Tell Us About Yourself") }}
  
           {{ form.research(class = "form-control", placeholder="Tell Us About Your Research") }}
 
-          <input type="hidden" name="save" value=1 />
+          <input type="hidden" name="email" value="{{ email }}">
+          <input type="hidden" name="password" value="{{ password }}">
 
           {{ form.submit(class = "btn btn-lg btn-primary btn-block") }}
 
